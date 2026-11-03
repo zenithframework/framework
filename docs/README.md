@@ -7,7 +7,8 @@ This directory is the documentation source of truth for the planned Zenith Frame
 These documents consolidate requirements and design decisions from project discussions. They are **specifications, not claims that features already exist**. Each feature must be validated against implementation and tests before being marked complete.
 
 - **Normative terms:** MUST, MUST NOT, SHOULD, MAY are used as requirements language.
-- **Baseline:** PHP `^8.5` as currently discussed for the project. Revisit before publishing package releases.
+- **PHP baseline:** PHP `^8.5` is required by the root Composer manifest. This supports compatible PHP 8.x releases from 8.5 onward; PHP 9 remains unsupported until verified.
+- **Coding standard:** PSR-12 is enforced by PHP_CodeSniffer using the root `phpcs.xml` ruleset and Composer scripts `lint:style` / `fix:style`.
 - **Architecture direction:** backend-first, Composer-first, modular framework; optional server-rendered interactive UI; stable API support for external clients.
 - **Compatibility principle:** retain existing working behavior during implementation; use incremental migrations rather than a destructive rewrite.
 
@@ -19,7 +20,7 @@ These documents consolidate requirements and design decisions from project discu
 | [Architecture](architecture.md) | System boundaries, dependency rules, application lifecycle |
 | [Directory structure](directory-structure.md) | Ownership of app, boot, core, system, support, packages and vendor |
 | [Package and Composer model](package-management.md) | Monorepo workspace, package manifests, path repositories and installed dependencies |
-| [PHP standards and typing](php-standards.md) | strict typing, namespaces, imports, static analysis and coding standards |
+| [PHP standards and typing](php-standards.md) | PHP 8.5+, strict typing, namespaces, imports, PSR-12 and style tooling |
 | [HTTP and routing](http-routing.md) | Requests, responses, middleware, route files and API contracts |
 | [Database and ORM](database-orm.md) | Connections, query builder, models, relations, security and pagination |
 | [Migrations and temporal data](migrations-temporal.md) | Schema evolution, history tables, retention, archive and partition strategy |
@@ -34,6 +35,10 @@ These documents consolidate requirements and design decisions from project discu
 | [Roadmap and acceptance](roadmap.md) | Sequencing, dependencies and definition of done |
 
 ## Decision register
+
+1. The core repository is a backend-only foundation. ORM, migration tooling, AI, UI, queue backends, WebSocket servers and provider integrations are separate optional Composer packages/repositories unless a later ADR changes this boundary.
+2. Composer requires PHP `^8.5`; PHP 9 is not declared supported until compatibility is verified.
+3. PSR-12 is enforced through the committed PHP_CodeSniffer ruleset and Composer scripts.
 
 1. Zenith is one backend-first framework architecture. Built-in UI is optional; external web, mobile and desktop clients consume stable HTTP/API contracts.
 2. Keep `boot/` as the application bootstrap/composition root. Do not rename it to `Kernel/`.
