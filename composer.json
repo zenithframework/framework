@@ -4,12 +4,19 @@
   "type": "library",
   "license": "MIT",
   "require": {
-    "php": "^8.2"
+    "php": "^8.5"
+  },
+  "require-dev": {
+    "squizlabs/php_codesniffer": "^4.0"
   },
   "autoload": {
     "psr-4": {
-      "Zenith\\": "src/Zenith/"
+      "Zenith\\\\": "src/Zenith/"
     }
+  },
+  "scripts": {
+    "lint:style": "phpcs",
+    "fix:style": "phpcbf"
   },
   "config": {
     "sort-packages": true,
