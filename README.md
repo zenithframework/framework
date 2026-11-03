@@ -10,8 +10,10 @@ Optional systems are intentionally excluded: ORM, migration tooling, database ve
 
 ## Requirements
 
-- PHP 8.2+
+- PHP 8.5 or later in the PHP 8.x series (Composer constraint: `^8.5`)
 - Composer 2
+
+PHP 9 is not included in the supported constraint until compatibility is verified.
 
 ## Install
 
@@ -21,9 +23,24 @@ composer require zenithframework/framework
 
 ## Development
 
+Install development tools and dependencies:
+
 ```bash
+composer install
 composer validate
 composer dump-autoload
 ```
 
-All PHP files must declare `strict_types=1`. See `docs/` for architecture boundaries.
+Check PSR-12 formatting:
+
+```bash
+composer lint:style
+```
+
+Automatically fix supported PSR-12 violations:
+
+```bash
+composer fix:style
+```
+
+All PHP source files must declare `strict_types=1`. PSR-12 is enforced by PHP_CodeSniffer using the repository's `phpcs.xml` ruleset. See `docs/` for architecture and contribution standards.
