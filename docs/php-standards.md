@@ -1,10 +1,12 @@
 # Zenith Framework — PHP Standards and Typing Specification
 
-**Status:** Proposed baseline
+**Status:** Accepted baseline for the core repository
 
 ## 1. PHP baseline
 
-The current project direction specifies PHP `^8.5`. Before publishing releases, confirm the minimum version is available in supported deployment environments and that CI runs the declared minimum plus current supported versions.
+The minimum supported runtime is PHP 8.5. The root Composer manifest declares `"php": "^8.5"`, which permits PHP 8.5 and compatible later PHP 8.x releases while excluding PHP 9 until compatibility is verified.
+
+Composer 2 is required for dependency management.
 
 ## 2. Strict typing
 
@@ -15,7 +17,7 @@ PHP strict typing is a **file-level** declaration:
 
 declare(strict_types=1);
 
-namespace App\\Services;
+namespace App\Services;
 
 final class AuthService
 {
@@ -27,7 +29,7 @@ final class AuthService
 }
 ```
 
-PHP does not provide a namespace-level or runtime switch equivalent to `declare(strict_types=1)`. A namespace such as `Zenith\\Strict` cannot turn strict typing on for every class within it. A namespace cannot be used as a substitute for this language feature.
+PHP does not provide a namespace-level or runtime switch equivalent to `declare(strict_types=1)`. A namespace such as `Zenith\Strict` cannot turn strict typing on for every class within it. A namespace cannot be used as a substitute for this language feature.
 
 Requirements:
 - Framework-owned PHP files MUST use `declare(strict_types=1);` unless an explicit compatibility exception is documented.
@@ -39,8 +41,8 @@ Requirements:
 
 ## 3. Namespaces and imports
 
-- Follow PSR-4 and PSR-12.
-- Use stable namespace roots such as `ZenithFramework\\...` for framework code and `App\\...` for application code.
+- Follow PSR-4 autoloading and PSR-12 coding style.
+- Use the Composer namespace root `Zenith\\` mapped to `src/Zenith/` for this repository.
 - Prefer imports at the top of the file over inline fully qualified class names.
 - Use fully qualified names only when they improve clarity, resolve a naming collision or are required by the context.
 - A quality tool SHOULD identify missing, unused, duplicate and incorrectly ordered imports.
@@ -61,20 +63,36 @@ Do not ban closures globally. Closures are appropriate for route groups, migrati
 
 ## 6. Coding conventions
 
-- PSR-12 formatting.
-- Typed properties and return types.
-- Explicit visibility.
-- Predictable exception types.
-- No suppressed errors as a substitute for handling.
-- No production TODO placeholders or pseudocode.
-- No secret values in source or fixtures.
+- PSR-12 formatting is mandatory for PHP source.
+- Use typed properties and parameter/return declarations where appropriate.
+- Declare visibility explicitly.
+- Use predictable exception types.
+- Do not suppress errors as a substitute for handling them.
+- Do not commit secret values in source or fixtures.
 - Avoid over-generalized helper classes.
 
-## 7. Quality tooling
+## 7. Executable style checks
+
+The repository uses PHP_CodeSniffer as a development dependency, with the PSR-12 standard configured in root `phpcs.xml`.
+
+```bash
+composer install
+composer lint:style
+```
+
+Run the code fixer for supported automatic changes, then review the diff:
+
+```bash
+composer fix:style
+```
+
+The underlying Composer scripts invoke `phpcs` and `phpcbf`. The ruleset currently scans `src/`, `bootstrap/` and `bin/`.
+
+## 8. Quality pipeline
 
 Recommended quality pipeline:
 1. `composer validate`;
-2. formatter/style check;
+2. `composer lint:style`;
 3. static analysis at an agreed level;
 4. import and namespace diagnostics;
 5. unit and integration tests;
@@ -82,8 +100,6 @@ Recommended quality pipeline:
 7. API compatibility checks;
 8. package installation test.
 
-The framework may expose these through `php zen lint` and `php zen test`; exact command syntax must be consistent with the CLI specification.
-
-## 8. Static analysis and generics
+## 9. Static analysis and generics
 
 Use PHPDoc generics where PHP's native type system cannot express collection, builder or relation type parameters. PHPDoc MUST match runtime behavior. Prefer explicit generic annotations for public collection/query APIs and test them with static-analysis fixtures.
