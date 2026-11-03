@@ -1,0 +1,20 @@
+{
+  "name": "zenithframework/framework",
+  "description": "The minimal backend foundation of the Zenith Framework.",
+  "type": "library",
+  "license": "MIT",
+  "require": {
+    "php": "^8.2"
+  },
+  "autoload": {
+    "psr-4": {
+      "Zenith\\": "src/Zenith/"
+    }
+  },
+  "config": {
+    "sort-packages": true,
+    "optimize-autoloader": true
+  },
+  "minimum-stability": "stable",
+  "prefer-stable": true
+}
