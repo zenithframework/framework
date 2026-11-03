@@ -3,7 +3,7 @@
 **Status:** Proposed baseline, consolidated from project discussions  
 **Product:** Zenith Framework  
 **Repository:** https://github.com/zenithframework/framework  
-**Runtime baseline:** PHP `^8.5` (provisional; validate against supported deployment environments before release)
+**Runtime baseline:** PHP `^8.5` (required by the root Composer manifest)
 
 ## 1. Executive summary
 
@@ -117,6 +117,7 @@ Representative use cases include CRUD applications, JSON APIs, authenticated app
 - Generators MUST follow canonical directory and namespace rules.
 - A code-quality command SHOULD detect missing, unused, duplicate and incorrectly ordered imports, plus avoidable fully qualified class names.
 - Closures MUST remain allowed where appropriate; tooling must not enforce a blanket closure ban.
+- PSR-12 compliance MUST be checked through the Composer `lint:style` script.
 
 ## 8. Quality attributes
 
@@ -126,13 +127,13 @@ Representative use cases include CRUD applications, JSON APIs, authenticated app
 | Performance | Baseline benchmarks for routing, container, ORM and representative requests |
 | Reliability | Deterministic migrations, worker retries and graceful failure |
 | Maintainability | Package boundaries, clear ownership, static analysis and coding standards |
-| Portability | Supported PHP/platform matrix and documented database-driver matrix |
+| Portability | PHP `^8.5` runtime requirement and documented database-driver matrix |
 | Accessibility | Built-in UI examples use semantic HTML and keyboard-accessible controls |
 | Compatibility | Semver policy and documented upgrade/deprecation process |
 
 ## 9. Success metrics
 
-Release gates should measure: test suite pass rate; static-analysis baseline; security test coverage; supported driver integration matrix; time to create a basic page/API/resource; package installability; migration safety; request and query benchmark baselines; documentation completeness; and absence of known critical/high security defects.
+Release gates should measure: test suite pass rate; static-analysis baseline; PSR-12 style check pass rate; security test coverage; supported driver integration matrix; time to create a basic page/API/resource; package installability; migration safety; request and query benchmark baselines; documentation completeness; and absence of known critical/high security defects.
 
 No numeric performance target is accepted until a reproducible baseline is recorded on defined hardware, PHP version, database and workload.
 
@@ -167,4 +168,5 @@ The initial product baseline is accepted when:
 - first-party package boundaries and dependency direction are documented;
 - external clients can consume the API without installing the UI runtime;
 - migration, security, package and upgrade guides exist;
+- `composer validate` and `composer lint:style` pass in CI;
 - benchmarks and compatibility claims include reproducible evidence.
